@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @Slf4j
@@ -40,7 +41,15 @@ public class TaskService {
         task.setStatus("CREATED");
         task.setCreatedAt(Instant.now());
         task.setUpdatedAt(Instant.now());
-        task.setParameters(request.getParameters());
+        // Convert Map<String, Object> to Map<String, String> for Cassandra
+        if (request.getParameters() != null) {
+            Map<String, String> stringParams = request.getParameters().entrySet().stream()
+                .collect(java.util.stream.Collectors.toMap(
+                    Map.Entry::getKey,
+                    entry -> entry.getValue() != null ? entry.getValue().toString() : null
+                ));
+            task.setParameters(stringParams);
+        }
         task.setCreatedBy(request.getCreatedBy());
         task.setAssignedTo(request.getAssignedTo());
         task.setMaxRetries(request.getMaxRetries());

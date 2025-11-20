@@ -60,6 +60,22 @@ public class WorkflowOrchestrationService {
     }
 
     /**
+     * Listen to task requests from API Gateway
+     */
+    @KafkaListener(topics = "${kafka.topics.task-requests}", groupId = "workflow-orchestration")
+    public void processTaskRequest(Task task) {
+        log.info("Processing task request: {} with status: {}", task.getId(), task.getStatus());
+        
+        try {
+            // Start workflow orchestration for the new task
+            orchestrateTaskWorkflow(task.getId());
+        } catch (Exception e) {
+            log.error("Error processing task request: {}", task.getId(), e);
+            handleWorkflowError(task.getId(), e);
+        }
+    }
+
+    /**
      * Listen to workflow events from Kafka
      */
     @KafkaListener(topics = "${kafka.topics.workflow-events}", groupId = "workflow-orchestration")

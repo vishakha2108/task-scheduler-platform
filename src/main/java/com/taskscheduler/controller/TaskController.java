@@ -40,6 +40,12 @@ public class TaskController {
                 .body(task);
     }
 
+    @GetMapping("/health")
+    public ResponseEntity<String> getHello() {
+
+        return ResponseEntity.ok("Allah hu habibi!!! bismilaah nizamudiin sarkar maksqad qubool ho!");
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<Task> getTask(@PathVariable UUID id) {
         Task task = taskService.getTask(id);
