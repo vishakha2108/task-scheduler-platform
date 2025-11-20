@@ -3,6 +3,8 @@ package com.taskscheduler.service;
 import com.taskscheduler.dto.CreateTaskRequest;
 import com.taskscheduler.model.Task;
 import com.taskscheduler.repository.TaskRepository;
+import io.micrometer.core.annotation.Timed;
+import io.micrometer.core.annotation.Counted;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -32,6 +34,8 @@ public class TaskService {
     }
 
     @Transactional
+    @Timed(value = "taskscheduler_database_save_duration_seconds", description = "Time taken to save tasks to database")
+    @Counted(value = "taskscheduler_tasks_created_total", description = "Total number of tasks created")
     public Task createTask(CreateTaskRequest request) {
         Task task = new Task();
         task.setId(UUID.randomUUID());
@@ -64,6 +68,7 @@ public class TaskService {
     }
 
     @Transactional(readOnly = true)
+    @Timed(value = "taskscheduler_database_query_duration_seconds", description = "Time taken to query tasks from database")
     public Task getTask(UUID taskId) {
         return taskRepository.findById(taskId)
                 .orElseThrow(() -> new RuntimeException("Task not found with id: " + taskId));

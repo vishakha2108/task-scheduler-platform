@@ -1,6 +1,8 @@
 package com.taskscheduler.service;
 
 import com.taskscheduler.model.Task;
+import io.micrometer.core.annotation.Timed;
+import io.micrometer.core.annotation.Counted;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -33,6 +35,8 @@ public class TaskExecutionService {
      * Listen to task execution requests from Kafka
      */
     @KafkaListener(topics = "${kafka.topics.task-execution}", groupId = "task-execution-service")
+    @Timed(value = "taskscheduler_task_execution_duration_seconds", description = "Time taken to execute tasks")
+    @Counted(value = "taskscheduler_kafka_messages_consumed_total", description = "Total number of messages consumed from Kafka")
     public void executeTask(Task task) {
         log.info("Received task for execution: {}", task.getId());
         

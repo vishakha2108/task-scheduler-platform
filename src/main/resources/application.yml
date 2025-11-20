@@ -27,6 +27,33 @@ spring:
     local-datacenter: datacenter1
     schema-action: NONE
 
+# Management and Actuator Configuration
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,metrics,prometheus,info
+  endpoint:
+    health:
+      show-details: always
+    metrics:
+      enabled: true
+    prometheus:
+      enabled: true
+  prometheus:
+    metrics:
+      export:
+        enabled: true
+  metrics:
+    distribution:
+      percentiles-histogram:
+        "[http.server.requests]": true
+      slo:
+        "[http.server.requests]": 50ms,100ms,200ms,500ms
+    tags:
+      application: ${spring.application.name}
+
+# Custom Application Configuration
 # Flink Configuration
 flink:
   job:

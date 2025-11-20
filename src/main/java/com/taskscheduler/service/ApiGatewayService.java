@@ -2,6 +2,8 @@ package com.taskscheduler.service;
 
 import com.taskscheduler.dto.CreateTaskRequest;
 import com.taskscheduler.model.Task;
+import io.micrometer.core.annotation.Timed;
+import io.micrometer.core.annotation.Counted;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,6 +29,8 @@ public class ApiGatewayService {
     /**
      * Process incoming task creation request from client
      */
+    @Timed(value = "taskscheduler_kafka_publish_duration_seconds", description = "Time taken to publish messages to Kafka")
+    @Counted(value = "taskscheduler_kafka_messages_published_total", description = "Total number of messages published to Kafka")
     public Task processTaskCreationRequest(CreateTaskRequest request) {
         log.info("Processing task creation request: {}", request.getName());
         

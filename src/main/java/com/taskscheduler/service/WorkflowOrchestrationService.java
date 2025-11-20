@@ -1,6 +1,8 @@
 package com.taskscheduler.service;
 
 import com.taskscheduler.model.Task;
+import io.micrometer.core.annotation.Timed;
+import io.micrometer.core.annotation.Counted;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,6 +32,8 @@ public class WorkflowOrchestrationService {
     /**
      * Orchestrate the complete task workflow
      */
+    @Timed(value = "taskscheduler_workflow_execution_duration_seconds", description = "Time taken to execute workflows")
+    @Counted(value = "taskscheduler_workflow_orchestrations_total", description = "Total number of workflow orchestrations")
     public CompletableFuture<Task> orchestrateTaskWorkflow(UUID taskId) {
         log.info("Starting workflow orchestration for task: {}", taskId);
         
