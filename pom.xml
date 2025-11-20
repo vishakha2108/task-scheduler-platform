@@ -16,12 +16,10 @@
     <artifactId>task-scheduler-platform</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>task-scheduler-platform</name>
-    <description>Task Scheduler Platform with Spring Boot, Flink, Kafka, RocksDB, and Cassandra</description>
+    <description>Task Scheduler Platform with Spring Boot, Kafka, and Cassandra</description>
 
     <properties>
         <java.version>17</java.version>
-        <flink.version>2.1.1</flink.version>
-        <flink.kafka.connector.version>4.0.1-2.0</flink.kafka.connector.version>
     </properties>
 
     <dependencies>
@@ -41,30 +39,6 @@
             <artifactId>spring-kafka</artifactId>
         </dependency>
 
-        <!-- Flink Dependencies -->
-        <dependency>
-            <groupId>org.apache.flink</groupId>
-            <artifactId>flink-streaming-java</artifactId>
-            <version>${flink.version}</version>
-        </dependency>
-        
-        <dependency>
-            <groupId>org.apache.flink</groupId>
-            <artifactId>flink-statebackend-rocksdb</artifactId>
-            <version>${flink.version}</version>
-        </dependency>
-        
-        <dependency>
-            <groupId>org.apache.flink</groupId>
-            <artifactId>flink-connector-kafka</artifactId>
-            <version>${flink.kafka.connector.version}</version>
-        </dependency>
-        
-        <dependency>
-            <groupId>org.apache.flink</groupId>
-            <artifactId>flink-connector-base</artifactId>
-            <version>${flink.version}</version>
-        </dependency>
         
         <!-- Jackson for JSON serialization -->
         <dependency>
@@ -122,34 +96,6 @@
                     <source>17</source>
                     <target>17</target>
                 </configuration>
-            </plugin>
-            
-            <!-- Maven Assembly Plugin for Flink Fat JAR -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <version>3.4.2</version>
-                <configuration>
-                    <descriptorRefs>
-                        <descriptorRef>jar-with-dependencies</descriptorRef>
-                    </descriptorRefs>
-                    <finalName>flink-job-${project.version}</finalName>
-                    <appendAssemblyId>false</appendAssemblyId>
-                    <archive>
-                        <manifest>
-                            <mainClass>com.taskscheduler.flink.SimpleFlinkJob</mainClass>
-                        </manifest>
-                    </archive>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>make-assembly</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
     </build>
