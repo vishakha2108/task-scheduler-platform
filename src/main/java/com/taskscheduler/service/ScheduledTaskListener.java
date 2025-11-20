@@ -13,7 +13,7 @@ public class ScheduledTaskListener {
     // @KafkaListener(topics = "${kafka.topics.scheduled-tasks}", groupId = "task-scheduler-platform")
     public void handleScheduledTask(Task task) {
         log.info("Received scheduled task from Flink: {} with status: {}", task.getId(), task.getStatus());
-        log.info("Task details: name={}, description={}", task.getName(), task.getDescription());
+        log.info("Task details: name={}, description={}", task.getId(), task.getTenant());
         
         // Here you can add logic to handle the scheduled task
         // For now, just log it to show the basic flow is working

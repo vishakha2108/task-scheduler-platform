@@ -23,7 +23,7 @@ spring:
   cassandra:
     contact-points: localhost
     port: 9042
-    keyspace-name: taskscheduler
+    keyspace-name: taskschedulers
     local-datacenter: datacenter1
     schema-action: NONE
 

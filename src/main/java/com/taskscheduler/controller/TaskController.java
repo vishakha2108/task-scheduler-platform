@@ -23,7 +23,7 @@ public class TaskController {
 
     @PostMapping
     public ResponseEntity<Task> createTask(@Valid @RequestBody CreateTaskRequest request) {
-        log.info("Received task creation request: {}", request.getName());
+        log.info("Received task creation request: {}", request.getId());
         
         Task task = taskService.createTask(request);
         
